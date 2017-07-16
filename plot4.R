@@ -1,0 +1,45 @@
+if (require(sqldf)) {
+    data <- read.csv2.sql(
+        "household_power_consumption.txt",
+        na.strings="?",
+        sql="SELECT * FROM file WHERE Date IN ('1/2/2007', '2/2/2007')")
+} else {
+    data <- read.csv2("household_power_consumption.txt", na.strings="?")
+}
+
+date_time <- paste(data$Date, data$Time)
+data$Date.Time <- strptime(date_time, format="%d/%m/%Y %H:%M:%S")
+
+png(file="plot4.png")
+
+par(mfrow=c(2, 2))
+
+with(
+    data, plot(
+        Date.Time, Global_active_power,
+        type="l",
+        xlab="",
+        ylab="Global Active Power"))
+
+with(
+    data, plot(
+        Date.Time, Voltage,
+        xlab="datetime",
+        type="l"))
+
+with(
+    data, plot(
+        Date.Time, Sub_metering_1,
+        type="l",
+        xlab="", ylab="Energy sub metering"))
+with(data, lines(Date.Time, Sub_metering_2, col="red"))
+with(data, lines(Date.Time, Sub_metering_3, col="blue"))
+
+with(
+    data, plot(
+        Date.Time, Global_reactive_power,
+        xlab="datetime",
+        type="l"))
+
+dev.off()
+
