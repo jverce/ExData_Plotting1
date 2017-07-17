@@ -19,6 +19,7 @@ if (require(sqldf)) {
         sql="SELECT * FROM file WHERE Date IN ('1/2/2007', '2/2/2007')")
 } else {
     data <- read.csv2("household_power_consumption.txt", na.strings="?")
+    data <- subset(data, Date %in% c("1/2/2007", "2/2/2007"))
 }
 
 
